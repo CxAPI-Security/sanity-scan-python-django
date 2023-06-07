@@ -1,7 +1,6 @@
-
-'''
+"""
 CUSTOM - to create hello routes
-'''
+"""
 
 from django.urls import path
 

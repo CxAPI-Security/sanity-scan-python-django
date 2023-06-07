@@ -14,27 +14,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
 from django.core.signals import request_finished, request_started
 from django.dispatch import receiver
 from django.http import HttpResponse
-
+from django.urls import path, include, re_path
 
 
 # A function that will behave as a route callback.
 def adhoc(request):
     return HttpResponse("Hello (GET from `/adhoc`)")
 
+
 # A function that will be a route callback with a parameter
 def adhoc_regex(request, regex):
     return HttpResponse(f"Hello (GET from `/adhoc-[regex]`)")
 
+
 # The main entry point to attach to the django routes.
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('adhoc', adhoc), # An ad-hoc way to include a function directly.
-    re_path(r'adhoc-(.*?)', adhoc_regex), # Regex matcher
-    path('hello/', include('hello.urls')), # Here we are including another URLconf module, defined at django_example/hello/urls.py
+    path('adhoc', adhoc),  # An ad-hoc way to include a function directly.
+    re_path(r'adhoc-(.*?)', adhoc_regex),  # Regex matcher
+    path('hello/', include('hello.urls')),
+    # Here we are including another URLconf module, defined at django_example/hello/urls.py
 
     # Sub paths + lambda
     path('<sub>-<sub_id>/', include([
@@ -47,7 +49,9 @@ urlpatterns = [
 
 # This is also interesting - called when a request is finished.
 def my_signal_callback(sender, **kwargs):
-    print("Signal recieved - request finished!")
+    print("Signal received - request finished!")
+
+
 request_finished.connect(my_signal_callback)
 
 
@@ -55,4 +59,3 @@ request_finished.connect(my_signal_callback)
 @receiver(request_started)
 def my_callback(sender, **kwargs):
     print("Request starting!")
-
